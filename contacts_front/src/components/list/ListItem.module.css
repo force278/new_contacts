@@ -1,0 +1,53 @@
+.BoxStyle {
+    display: flex;
+    flex-direction: row;
+    width: 230px;
+    height: 50px;
+    border-radius: 10px;
+    background-color:#808080;
+    margin-bottom: 10px;
+    padding: 5px;
+}
+
+.BoxInFocusStyle {
+    display: flex;
+    flex-direction: row;
+    width: 230px;
+    height: 50px;
+    border-radius: 10px;
+    background-color: #BEBEBE;
+    margin-bottom: 10px;
+    padding: 5px
+}
+
+.AvatarStyle {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+    background-color: #505050;
+}
+
+.NameStyle {
+    font-size: small;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.ImgStyle {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+}
+
+.EmptyImgStyle {
+    padding: 20%;
+    text-align: center;
+    font-weight: bold;
+}
+
+::placeholder {
+    color: black;
+    font-size: large;
+}

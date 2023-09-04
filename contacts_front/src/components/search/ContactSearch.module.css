@@ -1,0 +1,20 @@
+.BoxStyle {
+    display: flex;
+
+}
+
+.GroupBoxStyle {
+    margin-left: 20px;
+}
+
+.SelectStyle {
+    background-color: #505050;
+    height: 30px;
+}
+
+.InputStyle {
+    width: 250px;
+    height: 30px;
+    border-radius: 10px;
+    background-color: #505050;
+}

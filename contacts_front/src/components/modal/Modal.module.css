@@ -1,0 +1,65 @@
+.ModalInactiveStyle  {
+    opacity:0;
+}
+
+.ModalActiveStyle  {
+    z-Index: 1;
+    height:  100%;
+    width: 100%;
+    background-Color: rgba(0, 0, 0, 0.3);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-Items: center;
+    justify-Content: center;
+    opacity: 1;
+    transition: 0.5s;
+}
+
+.FormStyle  {
+    display: flex;
+    flex-Direction: column;
+    width: 200px;
+    height: max-content;
+    background-Color: #BEBEBE;
+    border-Radius: 10px;
+}
+
+
+.EditBtnStyle  {
+    font-size: large;
+    border-Width: 0px;
+    width: 100%;
+    color: black;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.DeleteBtnStyle  {
+    font-size: large;
+    border-Width: 0px;
+    width: 100%;
+    color: tomato;
+    border-end-end-radius: 10px;
+    border-end-start-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.ImgInputStyle {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+}
+
+.CloseBtnStyle {
+    display: flex;
+    margin-Left: auto;
+    border-Width: 0;
+    font-Size: 16px;
+    border-Radius: 10px;
+    background-color: #BEBEBE;
+}
