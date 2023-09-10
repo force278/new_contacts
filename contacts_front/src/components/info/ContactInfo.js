@@ -3,7 +3,7 @@ import Modal from '../modal/Modal';
 import styles from './ContactInfo.module.css'
 
 
-function ContactInfo ({idState, changeAvatar, deleteAvatar, editUser, groups, avatarState, setAvatarState={setAvatarState}, nameState, setNameState, numberState, setNumberState, groupState, setGroupState, deleteUser, addUser, editGroupState, setEditGroupState, addGroup, deleteGroup}) {
+function ContactInfo ({idState, changeAvatar, deleteAvatar, editUser, groups, avatarState, setAvatarState, nameState, setNameState, numberState, setNumberState, groupState, setGroupState, deleteUser, addUser, changeUser}) {
     const [modalState, setModalState] = useState({active:false, img:null})
     
 
@@ -12,7 +12,7 @@ function ContactInfo ({idState, changeAvatar, deleteAvatar, editUser, groups, av
             <div className={styles.BoxStyle}>
                 <div className={styles.AvatarAndInfoBoxStyle}>
                     <div className={styles.PhotoBoxStyle}>
-                        <h3>Фото профиля</h3>
+                        <h3 style={{marginTop:'20px'}}>Фото профиля</h3>
                         <div className={styles.AvatarStyle}>
                             {avatarState ? 
                                 <img className={styles.ImgStyle} src={avatarState} alt='a'></img>
@@ -27,7 +27,7 @@ function ContactInfo ({idState, changeAvatar, deleteAvatar, editUser, groups, av
                         </div>
                     </div>
                     <div className={styles.InfoBoxStyle}>
-                        <h3>Имя</h3>
+                        <h3 style={{marginTop:'20px'}}>Имя</h3>
                         <input className={styles.InputNameStyle} maxLength={20} onChange={(e) => {setNameState(e.target.value)}} value={nameState}></input>
                         <h3>Номер</h3>
                         <input className={styles.InputNumberStyle} maxLength={11} onChange={(e) => {setNumberState(e.target.value)}} value={numberState}></input>
@@ -38,6 +38,9 @@ function ContactInfo ({idState, changeAvatar, deleteAvatar, editUser, groups, av
                     <div>
                         <select value={groupState ? groups[groupState].group : 'Нет группы'} className={styles.SelectStyle} onChange={(e) => {  
                             let group = e.target.value
+                            if (group == null) {
+                                group = 0
+                            }
                             for (let i = 0; i < groups.length; i++){      
                                 if (groups[i].group === group)
                                     group = groups[i].id
@@ -52,6 +55,7 @@ function ContactInfo ({idState, changeAvatar, deleteAvatar, editUser, groups, av
 
                             }
                         </select>
+                        {idState ? <a href={`tel:+${numberState}`}><button className={styles.CallButtonStyle}>📞 Вызов</button></a> : null}
                     </div>
                 </div>
                 {idState ? 
@@ -64,7 +68,7 @@ function ContactInfo ({idState, changeAvatar, deleteAvatar, editUser, groups, av
                         <button className={styles.SaveEditButtonStyle} onClick={addUser} >Добавить контакт</button>
                     </div>
                 }
-                
+                {idState ? <div onClick={()=>{changeUser(null)}} className={styles.CloseInfoStyle}>x</div> : null}
                 <Modal avatarState={avatarState} changeAvatar={changeAvatar} deleteAvatar={deleteAvatar} modalState={modalState} setModalState={setModalState} onClick={()=> {setModalState({active:false, img:modalState.img})}} />
             </div>
             

@@ -55,31 +55,45 @@ function Contacts () {
     useEffect(()=>{
         axios.get(apiUrl + '/get_groups', {withCredentials: false})
         .then(response => {
-            groups = response.data
-            
-            setGroupsList(groups)
+            if (groups.length === 0) {
+                groups.push({id:0, group: 'Нет группы'})
+                groups.push(...response.data)
+                setGroupsList(groups)
+            }
         })
-        axios.get(apiUrl + '/get_users', {withCredentials: false})
-        .then(response => {
-            users = response.data
-            setUsersList(users) 
-        })
+            axios.get(apiUrl + '/get_users', {withCredentials: false})
+            .then(response => {
+                if (users.length === 0) {
+                    users = response.data
+                    setUsersList(users) 
+                }
+            })
+        
     }, [])
 
 
     function changeUser(id) {
-        console.log(users)
-        for (let i = 0; i < users.length; i++){
-            if(users[i].id === id) {
-                setIdState(users[i].id)
-                setAvatarState(users[i].avatar)
-                setNameState(users[i].name)
-                setNumberState(users[i].number)
-                setGroupState(users[i].group)
-                break
+        if (id) {
+            for (let i = 0; i < users.length; i++){
+                if(users[i].id === id) {
+                    setIdState(users[i].id)
+                    setAvatarState(users[i].avatar)
+                    setNameState(users[i].name)
+                    setNumberState(users[i].number)
+                    setGroupState(users[i].group)
+                    break
+                }
             }
+        } else {
+            setIdState(null)
+            setNameState('')
+            setAvatarState('')
+            setNumberState('')
+            setGroupState(null)
+            setActiveItemState(null)
+            setSearchInputState('')
+            setSearchGroupState(0)
         }
-        
     }
 
     function changeAvatar(img) {
@@ -102,6 +116,7 @@ function Contacts () {
             for (let i = 0; i < users.length; i++){
                 if(users[i].id === idState) {
                     users[i].avatar = ''
+                    axios.put(apiUrl+'/update_user', {'id': idState, 'name':nameState, 'number': numberState, 'group': groupState, 'avatar': ''})
                     setAvatarState('')                
                     break
                 }
@@ -117,6 +132,7 @@ function Contacts () {
         if (nameState !== '' && numberState !== '') {
             for (let i = 0; i < users.length; i++){
                 if(users[i].id === idState) {
+                    axios.put(apiUrl+'/update_user', {'id': idState, 'name':nameState, 'number': numberState, 'group': groupState, 'avatar': avatarState})
                     let List = [...users]
                     List[i].name = nameState
                     List[i].number = numberState
@@ -136,6 +152,7 @@ function Contacts () {
         if (idState){
             for (let i = 0; i < users.length; i++){
                 if(users[i].id === idState) {
+                    axios.delete(apiUrl+`/delete_user/${idState}`)
                     users.splice(i, 1)
                     let List = [...users]
                     setIdState(null)
@@ -157,10 +174,19 @@ function Contacts () {
     }
 
     function addUser() {
+        // Если заполнены данные
         if (idState === null && nameState !== '' && numberState !== '') {
-            axios.post(apiUrl+'/create_user', {avatar:avatarState, name:nameState, number:numberState, group:groupState})
-            users.push({id:users[users.length-1].id+1, avatar:avatarState, name:nameState, number:numberState, group:groupState})
-            let List = [...users]
+            let user_id = 1
+            let group_id = 0
+            if (users.length !== 0) {
+                user_id = users[users.length-1].id+1
+            }
+            if (groupState) {
+                group_id = groupState
+            }
+            axios.post(apiUrl+'/create_user', {avatar:avatarState, name:nameState, number:numberState, group:group_id})
+            users.push({id:user_id, avatar:avatarState, name:nameState, number:numberState, group:group_id})
+            let List = [...users] // меняется ссылка, а значит и перерендерится
             setSearchInputState('')
             setSearchGroupState(0)
             setUsersList(List)
@@ -204,14 +230,14 @@ function Contacts () {
                             if (activeItemState === index){
                                 focus = true 
                             }
-                            return(
+                            return (
                                 <ListItem key={index} id={item.id} index={index} focus={focus} changeUser={changeUser} avatar={item.avatar} name={item.name} setActiveItemState={setActiveItemState} />
                             )
                             
                         }) : <h4 className={styles.EmptyTextStyle}>Тут пока пусто🥺</h4>
                     }   
                     </ContactsList>
-                    <ContactInfo idState={idState} changeAvatar={changeAvatar} deleteAvatar={deleteAvatar} editUser={editUser} groups={groups} avatarState={avatarState} setAvatarState={setAvatarState} nameState={nameState} setNameState={setNameState} numberState={numberState} setNumberState={setNumberState} groupState={groupState} setGroupState={setGroupState} deleteUser={deleteUser} addUser={addUser} editGroupState={editGroupState} setEditGroupState={setEditGroupState}/>
+                    <ContactInfo idState={idState} changeAvatar={changeAvatar} deleteAvatar={deleteAvatar} editUser={editUser} groups={groups} avatarState={avatarState} setAvatarState={setAvatarState} nameState={nameState} setNameState={setNameState} numberState={numberState} setNumberState={setNumberState} groupState={groupState} setGroupState={setGroupState} deleteUser={deleteUser} addUser={addUser} editGroupState={editGroupState} setEditGroupState={setEditGroupState} changeUser={changeUser}/>
                 </div>
             </div>
         </div>

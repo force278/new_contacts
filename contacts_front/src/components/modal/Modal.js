@@ -19,17 +19,14 @@ function Modal({avatarState, changeAvatar, deleteAvatar, modalState, setModalSta
                         e.preventDefault();
                         let photo = document.querySelector('#imageInput');
                         let formData = new FormData();
-                        console.log(photo.files[0])
                         formData.append('file', photo.files[0])
-                        let response = null
                         axios.post(apiUrl+"/upload_avatar", formData, {
                             headers: {
                                 'Content-Type': 'multipart/form-data'
                             }
                         }).then((resp)=> {
-                            console.log(resp)
-                            setModalState({active:false, img: resp.data.filename})
-                            changeAvatar(resp.data.filename)
+                            setModalState({active:false, img: apiUrl + '/images/' + resp.data.filename})
+                            changeAvatar(apiUrl + '/images/' + resp.data.filename)
                         })
                         }}></input>
                     <label className={styles.EditBtnStyle} htmlFor='imageInput'>Изменить</label>
