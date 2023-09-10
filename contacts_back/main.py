@@ -1,7 +1,8 @@
 
 from fastapi import FastAPI, Body, File, UploadFile
-from fastapi.responses import JSONResponse, FileResponse
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from database import Database
 import uuid
 
@@ -24,9 +25,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.mount("/static", StaticFiles(directory="C:/Users/busin/Desktop/react/contacts_back/images"), name="image")
+
 @app.get("/")
 async def main():
-    return {"message": "Ебать черти"}
+    return {"message": "Hello"}
 
 @app.get("/get_users")
 async def get_users():
@@ -38,6 +41,7 @@ async def get_users():
 
 @app.post("/create_user")
 async def create_users(data = Body()):
+    print(f"api groupid = {data['group']}")
     await DB.create_user(data["name"], data["number"], data["group"], data["avatar"])
     return {"status": "success"}
 
@@ -73,6 +77,10 @@ async def upload_avatar(file: UploadFile = File(...)):
         f.write(contents)
     return {"filename": file.filename}
 
+
 @app.get("/images/{filename}")
 async def get_image(filename):
     return FileResponse(f"C:/Users/busin/Desktop/react/contacts_back/images/{filename}")
+
+#if __name__ == "__main__":
+#    uvicorn.run(app)

@@ -11,9 +11,9 @@ class Database:
 		CREATE TABLE IF NOT EXISTS users (
 		id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 		Name VARHCAR(30),
-		Avatar VARHCAR(100),
+		Avatar VARHCAR(100) DEFAULT NULL,
 	    Number INTEGER,
-	    GroupId INTEGER DEFAULT(0),
+	    GroupId INTEGER NOT NULL DEFAULT 0,
 	    FOREIGN KEY(GroupId) REFERENCES groups(id)
 		)''')
 		q.execute('''
@@ -38,9 +38,10 @@ class Database:
 		connection.commit()
 		connection.close()
 		return result
-	async def create_user(self, Name, Number, GroupId, Avatar=None):
+	async def create_user(self, Name, Number, GroupId=0, Avatar=None):
 		connection = sql.connect("contacts.sqlite", check_same_thread=False)
 		q = connection.cursor()
+		print(f"database groupid = {GroupId}")
 		q.execute("INSERT INTO users (Name, Number, GroupId, Avatar) VALUES ('%s', '%s', '%s', '%s' )" % (Name, Number, GroupId, Avatar))
 		connection.commit()
 		connection.close()
@@ -52,7 +53,7 @@ class Database:
 		connection.commit()
 		connection.close()
 		return result
-	async def update_user(self, id, Name=None, Number=None, GroupId=None, Avatar=None):
+	async def update_user(self, id, Name=None, Number=None, GroupId=0, Avatar=None):
 		connection = sql.connect("contacts.sqlite", check_same_thread=False)
 		q = connection.cursor()
 		q.execute("SELECT * FROM users WHERE id = '%s'" % (id))
